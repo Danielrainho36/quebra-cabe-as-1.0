@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Jogo do Galo 3D</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="header">
+            <h1>Jogo do Galo 3D</h1>
+            <div id="info">
+                <div id="current-player">Jogador: <span id="player-name">X</span></div>
+                <div id="score">
+                    <span>X: <span id="score-x">0</span></span>
+                    <span>O: <span id="score-o">0</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="canvas-container">
+            <canvas id="game-canvas"></canvas>
+        </div>
+
+        <div id="controls">
+            <button id="reset-btn" class="btn">Reiniciar Jogo</button>
+            <button id="rotate-left" class="btn-small">← Rodar</button>
+            <button id="rotate-right" class="btn-small">Rodar →</button>
+        </div>
+
+        <div id="message" class="hidden"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
