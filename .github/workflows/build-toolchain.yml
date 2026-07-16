@@ -27,12 +27,13 @@ jobs:
       - name: Package reusable tools
         run: |
           set -euxo pipefail
-          mkdir -p toolchain/build-tools/lib toolchain/platform
+          mkdir -p toolchain/build-tools/lib toolchain/build-tools/lib64 toolchain/platform
           cp "$ANDROID_HOME/build-tools/35.0.1/aapt2" toolchain/build-tools/
           cp "$ANDROID_HOME/build-tools/35.0.1/zipalign" toolchain/build-tools/
           cp "$ANDROID_HOME/build-tools/35.0.1/apksigner" toolchain/build-tools/
           cp "$ANDROID_HOME/build-tools/35.0.1/lib/d8.jar" toolchain/build-tools/lib/
           cp "$ANDROID_HOME/build-tools/35.0.1/lib/apksigner.jar" toolchain/build-tools/lib/
+          cp -a "$ANDROID_HOME/build-tools/35.0.1/lib64/." toolchain/build-tools/lib64/
           cp "$ANDROID_HOME/platforms/android-35/android.jar" toolchain/platform/
           sha256sum toolchain/build-tools/aapt2 toolchain/build-tools/zipalign toolchain/build-tools/lib/d8.jar toolchain/build-tools/lib/apksigner.jar toolchain/platform/android.jar > toolchain/SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
