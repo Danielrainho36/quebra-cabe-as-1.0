@@ -1,0 +1,43 @@
+name: Prepare Android APK Toolchain
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '.toolchain-trigger'
+
+permissions:
+  contents: read
+
+jobs:
+  package-toolchain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android 35 toolchain
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager 'platforms;android-35' 'build-tools;35.0.1'
+      - name: Package reusable tools
+        run: |
+          set -euxo pipefail
+          mkdir -p toolchain/build-tools/lib toolchain/platform
+          cp "$ANDROID_HOME/build-tools/35.0.1/aapt2" toolchain/build-tools/
+          cp "$ANDROID_HOME/build-tools/35.0.1/zipalign" toolchain/build-tools/
+          cp "$ANDROID_HOME/build-tools/35.0.1/apksigner" toolchain/build-tools/
+          cp "$ANDROID_HOME/build-tools/35.0.1/lib/d8.jar" toolchain/build-tools/lib/
+          cp "$ANDROID_HOME/build-tools/35.0.1/lib/apksigner.jar" toolchain/build-tools/lib/
+          cp "$ANDROID_HOME/platforms/android-35/android.jar" toolchain/platform/
+          sha256sum toolchain/build-tools/aapt2 toolchain/build-tools/zipalign toolchain/build-tools/lib/d8.jar toolchain/build-tools/lib/apksigner.jar toolchain/platform/android.jar > toolchain/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-35-apk-toolchain
+          retention-days: 3
+          if-no-files-found: error
+          path: toolchain/
